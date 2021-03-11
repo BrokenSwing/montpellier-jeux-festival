@@ -3,6 +3,9 @@ import { createParamDecorator, NotFoundException } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
 import { Request } from 'express';
+import { Booking } from 'src/booking/entities/booking.entity';
+import { GameQuantities } from 'src/booking/entities/game-quantities';
+import { TableQuantities } from 'src/booking/entities/table-quantities.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { Contact } from 'src/company/entities/contact.entity';
 import { Area } from 'src/festival/entities/area.entity';
@@ -53,5 +56,14 @@ export const UUID = createParamDecorator<string>(
  * @returns the typeorm module featuring all entities
  */
 export function databaseAccessModule() {
-  return TypeOrmModule.forFeature([Festival, Price, Area, Contact, Company]);
+  return TypeOrmModule.forFeature([
+    Festival,
+    Price,
+    Area,
+    Contact,
+    Company,
+    Booking,
+    TableQuantities,
+    GameQuantities,
+  ]);
 }

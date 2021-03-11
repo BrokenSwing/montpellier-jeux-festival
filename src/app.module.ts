@@ -6,6 +6,7 @@ import { FestivalModule } from './festival/festival.module';
 import { CompanyModule } from './company/company.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     CompanyModule,
     UserModule,
     AuthModule,
+    BookingModule,
   ],
   controllers: [],
   providers: [],

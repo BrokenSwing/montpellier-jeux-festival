@@ -5,7 +5,7 @@ import { Company } from './company.entity';
 
 @Entity()
 export class Contact {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
