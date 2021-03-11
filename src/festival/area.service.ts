@@ -1,13 +1,12 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hasNoFields } from '../utils';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { Area } from './entities/area.entity';
@@ -26,51 +25,34 @@ export class AreaService {
   ) {}
 
   /**
-   * Creates an area for the festival with the given id.
+   * Creates an area for a festival.
    *
-   * @param festivalId The id of the festival the area belongs to
    * @param createAreaDto The data for the area
    * @returns the created area
    */
-  create(festivalId: string, createAreaDto: CreateAreaDto) {
+  create(createAreaDto: CreateAreaDto) {
+    const { festival, ...dto } = createAreaDto;
     return this.areaRepository.save({
-      festivalId,
-      ...createAreaDto,
+      festivalId: festival,
+      ...dto,
     });
   }
 
   /**
    * Updates an area.
    *
-   * @param festivalId The id of the festival the area belongs to
    * @param areaId The id of the area to update
    * @param updateAreaDto The data to update
    * @returns the updated area
    */
-  async update(
-    festivalId: string,
-    areaId: string,
-    updateAreaDto: UpdateAreaDto,
-  ) {
+  async update(areaId: string, updateAreaDto: UpdateAreaDto) {
     if (hasNoFields(updateAreaDto)) {
       throw new BadRequestException(
         'You must specify at least one field to update',
       );
     }
 
-    let result: UpdateResult;
-    try {
-      result = await this.areaRepository.update(
-        {
-          id: areaId,
-          festivalId,
-        },
-        updateAreaDto,
-      );
-    } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException();
-    }
+    let result = await this.areaRepository.update(areaId, updateAreaDto);
 
     if (result.affected === 0) {
       throw new NotFoundException();
@@ -79,31 +61,13 @@ export class AreaService {
   }
 
   /**
-   * Find all areas of a the festival with the given id.
-   *
-   * @param festivalId The id of the festival to find areas of
-   * @returns all areas of the festival
-   */
-  findAllForFestival(festivalId: string) {
-    return this.areaRepository.find({
-      where: {
-        festivalId,
-      },
-    });
-  }
-
-  /**
    * Deletes an area.
    *
-   * @param festivalId The id of the festival the area belongs to
    * @param areaId The id of the area to delete
    * @returns
    */
-  async delete(festivalId: string, areaId: string) {
-    const result = await this.areaRepository.delete({
-      festivalId,
-      id: areaId,
-    });
+  async delete(areaId: string) {
+    const result = await this.areaRepository.delete(areaId);
     if (result.affected === 0) {
       throw new NotFoundException();
     }

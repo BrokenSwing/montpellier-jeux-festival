@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -29,14 +28,14 @@ export class PriceService {
    * Creates a category of prices for the festival with the given
    * festivalId.
    *
-   * @param festivalId The id of the festival the price belongs to
    * @param createPriceDto The data for the price category
    * @returns the created festival
    */
-  create(festivalId: string, createPriceDto: CreatePriceDto) {
+  create(createPriceDto: CreatePriceDto) {
+    const { festival, ...dto } = createPriceDto;
     return this.priceRepository.save({
-      festivalId,
-      ...createPriceDto,
+      festivalId: festival,
+      ...dto,
     });
   }
 
@@ -44,36 +43,18 @@ export class PriceService {
    * Updates the price category with the given priceId of the festival
    * with the given festivalId.
    *
-   * @param festivalId The id of the festival the price category belongs to
    * @param priceId The id of the price category to update
    * @param updatePriceDto The data to update the price category
    * @returns the updated price category
    */
-  async update(
-    festivalId: string,
-    priceId: string,
-    updatePriceDto: UpdatePriceDto,
-  ) {
+  async update(priceId: string, updatePriceDto: UpdatePriceDto) {
     if (hasNoFields(updatePriceDto)) {
       throw new BadRequestException(
         'You must specify at least one field to update',
       );
     }
 
-    let result: UpdateResult;
-
-    try {
-      result = await this.priceRepository.update(
-        {
-          id: priceId,
-          festivalId,
-        },
-        updatePriceDto,
-      );
-    } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException();
-    }
+    let result = await this.priceRepository.update(priceId, updatePriceDto);
 
     if (result.affected === 0) {
       throw new NotFoundException();
@@ -82,39 +63,13 @@ export class PriceService {
   }
 
   /**
-   * Find all price categories for the festival with the given
-   * festivalId.
-   *
-   * @param festivalId The id of the festival
-   * @returns all price categories
-   */
-  async findByFestival(festivalId: string) {
-    const price = await this.priceRepository.find({
-      where: {
-        festival: {
-          id: festivalId,
-        },
-      },
-    });
-
-    if (price) {
-      return price;
-    }
-    throw new NotFoundException();
-  }
-
-  /**
    * Deletes a price category.
    *
-   * @param festivalId The id of the festival the price category belongs to
    * @param priceId The id of the price category
    * @returns an object if deletion was successful
    */
-  async delete(festivalId: string, priceId: string) {
-    const result = await this.priceRepository.delete({
-      id: priceId,
-      festivalId,
-    });
+  async delete(priceId: string) {
+    const result = await this.priceRepository.delete(priceId);
     if (result.affected === 0) {
       throw new NotFoundException();
     }

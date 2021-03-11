@@ -22,31 +22,25 @@ export class ContactService {
   /**
    * Create a contact for a company.
    *
-   * @param companyId The id to create the contact for
    * @param createContactDto The data to create the contact
    * @returns the created contact
    */
-  create(companyId: string, createContactDto: CreateContactDto) {
+  create(createContactDto: CreateContactDto) {
+    const { company, ...dto } = createContactDto;
     return this.contactRepository.create({
-      ...createContactDto,
-      companyId,
+      ...dto,
+      companyId: company,
     });
   }
 
   /**
-   * Finds the contact with the given id that belongs to the company
-   * with the given id.
+   * Finds the contact with the given id.
    *
-   * @param companyId The id of the company the contact belongs to
    * @param contactId The id of the contact
    * @returns the requested contact
    */
-  async findOne(companyId: string, contactId: string) {
-    const contact = await this.contactRepository.findOne(contactId, {
-      where: {
-        companyId,
-      },
-    });
+  async findOne(contactId: string) {
+    const contact = await this.contactRepository.findOne(contactId);
 
     if (contact) {
       return contact;
@@ -55,61 +49,35 @@ export class ContactService {
   }
 
   /**
-   * Retrieves all the contacts for a given company.
-   *
-   * @param companyId The id of the company to find contacts of
-   * @returns the contacts of the company with the given id
-   */
-  async findAllForCompany(companyId: string) {
-    return this.contactRepository.find({
-      where: {
-        companyId,
-      },
-    });
-  }
-
-  /**
-   * Updates the contact with the given id, from the company with the given id,
+   * Updates the contact with the given id,
    * updating it's fields with the given data.
    *
-   * @param companyId The id of the company the contact belongs to
    * @param contactId The id of the contact to update
    * @param updateContactDto The data to update the contact
    * @return the updated contact
    */
-  async update(
-    companyId: string,
-    contactId: string,
-    updateContactDto: UpdateContactDto,
-  ) {
+  async update(contactId: string, updateContactDto: UpdateContactDto) {
     if (hasNoFields(updateContactDto)) {
       throw new BadRequestException('You must specify at least one field');
     }
     const result = await this.contactRepository.update(
-      {
-        id: contactId,
-        companyId,
-      },
+      contactId,
       updateContactDto,
     );
     if (result.affected === 0) {
       throw new NotFoundException();
     }
-    return this.findOne(companyId, contactId);
+    return this.findOne(contactId);
   }
 
   /**
    * Deletes the contact with the given id.
    *
-   * @param companyId The id of the company the contact belongs to
    * @param contactId The id of the contact
    * @returns an object indicating the deletation was successful
    */
-  async delete(companyId: string, contactId: string) {
-    const result = await this.contactRepository.delete({
-      id: contactId,
-      companyId,
-    });
+  async delete(contactId: string) {
+    const result = await this.contactRepository.delete(contactId);
     if (result.affected === 0) {
       throw new NotFoundException();
     }
