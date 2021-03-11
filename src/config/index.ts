@@ -1,6 +1,8 @@
 import { ConfigModule } from '@nestjs/config';
 import { checkConfigForDatabase } from './database';
+import { checkConfigForJWT } from './jwt';
 export { DATABASE_URL } from './database';
+export { JWT_SECRET } from './jwt';
 export const PRODUCTION = 'isProduction';
 
 function checkIsProduction(config: Record<string, unknown>) {
@@ -10,6 +12,7 @@ function checkIsProduction(config: Record<string, unknown>) {
 
 function checkConfig(config: Record<string, unknown>) {
   checkConfigForDatabase(config);
+  checkConfigForJWT(config);
   config = checkIsProduction(config);
   return config;
 }

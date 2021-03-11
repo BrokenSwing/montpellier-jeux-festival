@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { configurationModule, DATABASE_URL, PRODUCTION } from './config';
 import { FestivalModule } from './festival/festival.module';
 import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { CompanyModule } from './company/company.module';
     }),
     FestivalModule,
     CompanyModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
