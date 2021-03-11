@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -27,9 +28,11 @@ export class Festival {
 
   // Relations
 
+  @ApiHideProperty()
   @OneToMany(() => Price, (price) => price.festival)
   prices: Price[];
 
+  @ApiHideProperty()
   @OneToMany(() => Area, (area) => area.festival)
   areas: Area[];
 }

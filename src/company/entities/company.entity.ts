@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Company {
@@ -23,6 +24,7 @@ export class Company {
 
   // Relations
 
+  @ApiHideProperty()
   @OneToMany(() => Contact, (contact) => contact.company)
   contacts: Contact[];
 }

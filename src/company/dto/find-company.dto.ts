@@ -3,13 +3,13 @@ import { IsBoolean, IsOptional } from 'class-validator';
 export class FindCompanyDto {
   @IsOptional()
   @IsBoolean()
-  publisher: boolean;
+  publisher?: boolean;
 
   @IsOptional()
   @IsBoolean()
-  exhibitor: boolean;
+  exhibitor?: boolean;
 
   @IsOptional()
   @IsBoolean()
-  active: boolean;
+  active?: boolean;
 }

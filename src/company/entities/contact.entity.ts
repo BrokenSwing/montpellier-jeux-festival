@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Company } from './company.entity';
@@ -27,6 +28,7 @@ export class Contact {
 
   // Relations
 
+  @ApiHideProperty()
   @ManyToOne(() => Company, (company) => company.contacts)
   company: Company;
 }

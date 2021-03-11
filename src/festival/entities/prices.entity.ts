@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Festival } from './festival.entity';
 
@@ -28,6 +29,7 @@ export class Price {
 
   // Relations
 
+  @ApiHideProperty()
   @ManyToOne(() => Festival, (festival) => festival.prices)
   festival: Festival;
 }
