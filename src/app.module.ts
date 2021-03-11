@@ -7,6 +7,7 @@ import { CompanyModule } from './company/company.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { BookingModule } from './booking/booking.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BookingModule } from './booking/booking.module';
     UserModule,
     AuthModule,
     BookingModule,
+    GameModule,
   ],
   controllers: [],
   providers: [],
