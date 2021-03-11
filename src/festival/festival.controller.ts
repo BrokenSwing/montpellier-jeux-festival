@@ -7,7 +7,7 @@ import { CreatePriceDto } from './dto/create-price.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { UUID } from '../utils';
 
-@Controller('festival')
+@Controller('api/festival')
 export class FestivalController {
   constructor(
     private readonly festivalService: FestivalService,

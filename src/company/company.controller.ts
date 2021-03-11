@@ -16,7 +16,7 @@ import { FindCompanyDto } from './dto/find-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
-@Controller('company')
+@Controller('api/company')
 export class CompanyController {
   constructor(
     private readonly companyService: CompanyService,
