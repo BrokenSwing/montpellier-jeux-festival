@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Game } from 'src/game/entities/game.entity';
 
 @Entity()
 export class Company {
@@ -27,4 +28,8 @@ export class Company {
   @ApiHideProperty()
   @OneToMany(() => Contact, (contact) => contact.company)
   contacts: Contact[];
+
+  @ApiHideProperty()
+  @OneToMany(() => Game, (game) => game.publisher)
+  games: Game[];
 }

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { UUID } from 'src/utils';
 
 @Controller('game')
 export class GameController {
@@ -13,22 +14,22 @@ export class GameController {
   }
 
   @Get()
-  findAll() {
+  findAllGames() {
     return this.gameService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gameService.findOne(+id);
+  findOneGame(@UUID('id') id: string) {
+    return this.gameService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gameService.update(+id, updateGameDto);
+  updateGame(@UUID('id') id: string, @Body() updateGameDto: UpdateGameDto) {
+    return this.gameService.update(id, updateGameDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.gameService.remove(+id);
+  deleteGame(@UUID('id') id: string) {
+    return this.gameService.remove(id);
   }
 }

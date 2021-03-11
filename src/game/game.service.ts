@@ -1,26 +1,94 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Company } from 'src/company/entities/company.entity';
+import { hasNoFields, isConstraint } from 'src/utils';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Game, UQ_NAME } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
-  create(createGameDto: CreateGameDto) {
-    return 'This action adds a new game';
+  private readonly logger = new Logger(GameService.name);
+
+  constructor(
+    @InjectRepository(Game)
+    @InjectRepository(Company)
+    private gameRepository: Repository<Game>,
+    private companyRepository: Repository<Company>,
+  ) {}
+
+  async create(createGameDto: CreateGameDto) {
+    let res: Company;
+    try {
+      res = await this.companyRepository.findOne({
+        id: createGameDto.publisherId,
+      });
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+    if (res) {
+      try {
+        await this.gameRepository.save(createGameDto);
+      } catch (e) {
+        if (isConstraint(e, UQ_NAME)) {
+          throw new BadRequestException('The given game name is already used');
+        }
+        this.logger.error(e);
+        throw new InternalServerErrorException();
+      }
+    }
+    throw new BadRequestException(
+      "This publisher id doesn't exists upon game creation",
+    );
   }
 
   findAll() {
-    return `This action returns all game`;
+    return this.gameRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
+  async findOne(id: string) {
+    const game = await this.gameRepository.findOne(id);
+    if (game) {
+      return game;
+    }
+    throw new NotFoundException(`No game with UUID ${id} can be found`);
   }
 
-  update(id: number, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
+  async update(id: string, updateGameDto: UpdateGameDto) {
+    if (hasNoFields(updateGameDto)) {
+      return new BadRequestException('You must specify fields to update');
+    }
+    let updateResult: UpdateResult;
+    try {
+      updateResult = await this.gameRepository.update(id, updateGameDto);
+      if (updateResult.affected === 0) {
+        throw new NotFoundException();
+      }
+      return await this.findOne(id);
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} game`;
+  async remove(id: string) {
+    let deleteResult: DeleteResult;
+    try {
+      deleteResult = await this.gameRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new NotFoundException();
+      }
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 }
