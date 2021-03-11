@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configurationModule, DATABASE_URL, PRODUCTION } from './config';
 import { FestivalModule } from './festival/festival.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FestivalModule } from './festival/festival.module';
       }),
     }),
     FestivalModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

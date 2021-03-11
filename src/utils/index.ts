@@ -1,7 +1,13 @@
 import { ExecutionContext } from '@nestjs/common';
 import { createParamDecorator, NotFoundException } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
 import { Request } from 'express';
+import { Company } from 'src/company/entities/company.entity';
+import { Contact } from 'src/company/entities/contact.entity';
+import { Area } from 'src/festival/entities/area.entity';
+import { Festival } from 'src/festival/entities/festival.entity';
+import { Price } from 'src/festival/entities/prices.entity';
 
 /**
  * Checks whether or not the passed object has field.
@@ -42,3 +48,10 @@ export const UUID = createParamDecorator<string>(
     throw new NotFoundException();
   },
 );
+
+/**
+ * @returns the typeorm module featuring all entities
+ */
+export function databaseAccessModule() {
+  return TypeOrmModule.forFeature([Festival, Price, Area, Contact, Company]);
+}
