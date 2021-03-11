@@ -6,9 +6,10 @@ import { Festival } from './entities/festival.entity';
 import { Price } from './entities/prices.entity';
 import { Area } from './entities/area.entity';
 import { PriceService } from './price.service';
+import { databaseAccessModule } from '../utils';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Festival, Price, Area])],
+  imports: [databaseAccessModule()],
   controllers: [FestivalController],
   providers: [FestivalService, PriceService],
 })
