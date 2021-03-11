@@ -23,7 +23,8 @@ export class UserService {
    */
   async create(createUserDto: CreateUserDto) {
     try {
-      return await this.userRepository.save(createUserDto);
+      const {password, ...result} = await this.userRepository.save(createUserDto);
+      return result;
     } catch (e) {
       if (isConstraint(e, UQ_NAME)) {
         throw new BadRequestException(
@@ -50,10 +51,11 @@ export class UserService {
    * @param id The id of the user to retrieve
    * @returns the user with the given id
    */
-  findOne(id: string) {
-    const user = this.userRepository.findOne(id);
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne(id);
     if(user){
-      return user;
+      const {password, ...result} = user;
+      return result;
     }
     else{
       throw new NotFoundException(`No user with UUID ${id} can be found`);
