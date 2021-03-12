@@ -76,7 +76,7 @@ export class FestivalService {
    */
   async update(id: string, updateFestivalDto: UpdateFestivalDto) {
     if (hasNoFields(updateFestivalDto)) {
-      return new BadRequestException('You must specify fields to update');
+      throw new BadRequestException('You must specify fields to update');
     }
 
     let result: UpdateResult;

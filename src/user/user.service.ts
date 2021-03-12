@@ -11,6 +11,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UQ_NAME, User } from './entities/user.entity';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly passwordService: PasswordService,
   ) {}
 
   /**
@@ -29,6 +31,9 @@ export class UserService {
    */
   async create(createUserDto: CreateUserDto) {
     try {
+      createUserDto.password = await this.passwordService.hashPassword(
+        createUserDto.password,
+      );
       const { password, ...result } = await this.userRepository.save(
         createUserDto,
       );
@@ -45,8 +50,12 @@ export class UserService {
   /**
    * @returns all users
    */
-  findAll() {
-    return this.userRepository.find();
+  async findAll() {
+    const users = await this.userRepository.find();
+    return users.map((user) => {
+      const { password, ...result } = user;
+      return result;
+    });
   }
 
   /**
@@ -88,10 +97,16 @@ export class UserService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     if (hasNoFields(updateUserDto)) {
-      return new BadRequestException('You must specify fields to update');
+      throw new BadRequestException('You must specify fields to update');
     }
 
     let result: UpdateResult;
+
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.passwordService.hashPassword(
+        updateUserDto.password,
+      );
+    }
     try {
       result = await this.userRepository.update(id, updateUserDto);
     } catch (e) {
@@ -111,7 +126,11 @@ export class UserService {
    * @param id The id of the user to delete
    * @returns the result of deleting
    */
-  remove(id: string) {
-    return this.userRepository.delete(id);
+  async remove(id: string) {
+    const result = await this.userRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
+    return { deleted: true };
   }
 }
