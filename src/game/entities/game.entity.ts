@@ -8,10 +8,10 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-export const UQ_NAME = 'UQ_NAME';
+export const UQ_GAME_NAME = 'UQ_GAME_NAME';
 
 @Entity()
-@Unique(UQ_NAME, ['name'])
+@Unique(UQ_GAME_NAME, ['name'])
 export class Game {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,7 +23,10 @@ export class Game {
   duration: string;
 
   @Column()
-  players: number;
+  minPlayers: number;
+
+  @Column()
+  maxPlayers: number;
 
   @Column()
   minAge: number;

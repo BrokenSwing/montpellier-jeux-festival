@@ -8,7 +8,10 @@ export class CreateGameDto {
   duration: string;
 
   @IsInt()
-  players: number;
+  minPlayers: number;
+
+  @IsInt()
+  maxPlayers: number;
 
   @IsInt()
   minAge: number;

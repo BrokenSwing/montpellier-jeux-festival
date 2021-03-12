@@ -11,7 +11,7 @@ import { hasNoFields, isConstraint } from 'src/utils';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { Game, UQ_NAME } from './entities/game.entity';
+import { Game, UQ_GAME_NAME } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
@@ -19,8 +19,8 @@ export class GameService {
 
   constructor(
     @InjectRepository(Game)
-    @InjectRepository(Company)
     private gameRepository: Repository<Game>,
+    @InjectRepository(Company)
     private companyRepository: Repository<Company>,
   ) {}
 
@@ -36,9 +36,9 @@ export class GameService {
     }
     if (res) {
       try {
-        await this.gameRepository.save(createGameDto);
+        return await this.gameRepository.save(createGameDto);
       } catch (e) {
-        if (isConstraint(e, UQ_NAME)) {
+        if (isConstraint(e, UQ_GAME_NAME)) {
           throw new BadRequestException('The given game name is already used');
         }
         this.logger.error(e);
@@ -75,6 +75,9 @@ export class GameService {
       return await this.findOne(id);
     } catch (e) {
       this.logger.error(e);
+      if (isConstraint(e, UQ_GAME_NAME)) {
+        throw new BadRequestException('The given game name is already used');
+      }
       throw new InternalServerErrorException();
     }
   }
@@ -86,6 +89,7 @@ export class GameService {
       if (deleteResult.affected === 0) {
         throw new NotFoundException();
       }
+      return { message: `The game with UUID ${id} was successfully deleted` };
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();

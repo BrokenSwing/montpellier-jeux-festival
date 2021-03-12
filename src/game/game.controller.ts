@@ -4,7 +4,7 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { UUID } from 'src/utils';
 
-@Controller('game')
+@Controller('api/game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 

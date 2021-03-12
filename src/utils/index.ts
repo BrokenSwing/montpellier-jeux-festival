@@ -11,6 +11,7 @@ import { Contact } from 'src/company/entities/contact.entity';
 import { Area } from 'src/festival/entities/area.entity';
 import { Festival } from 'src/festival/entities/festival.entity';
 import { Price } from 'src/festival/entities/prices.entity';
+import { Game } from 'src/game/entities/game.entity';
 
 /**
  * Checks whether or not the passed object has field.
@@ -32,7 +33,7 @@ export function hasNoFields(obj: any) {
  * @returns true if the error matches a constraint error
  */
 export function isConstraint(e: any, constraintName: string) {
-  return e && e.constraint && e.constraint.name === constraintName;
+  return e && e.constraint === constraintName;
 }
 
 /**
@@ -65,5 +66,6 @@ export function databaseAccessModule() {
     Booking,
     TableQuantities,
     GameQuantities,
+    Game,
   ]);
 }
