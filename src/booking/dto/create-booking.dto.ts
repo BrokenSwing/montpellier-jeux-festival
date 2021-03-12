@@ -2,9 +2,11 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 
@@ -38,4 +40,8 @@ export class CreateBookingDto {
   @Type(() => Date)
   @IsOptional()
   billPaidOn?: Date;
+
+  @IsUUID()
+  @IsNotEmpty()
+  festival: string;
 }

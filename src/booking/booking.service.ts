@@ -21,12 +21,16 @@ export class BookingService {
 
   /**
    * Creates a booking.
-   * 
+   *
    * @param createBookingDto The data to create the booking
    * @returns the created booking
    */
   create(createBookingDto: CreateBookingDto) {
-    return this.bookingRepository.create(createBookingDto);
+    const { festival, ...dto } = createBookingDto;
+    return this.bookingRepository.create({
+      ...dto,
+      festivalId: festival,
+    });
   }
 
   /**

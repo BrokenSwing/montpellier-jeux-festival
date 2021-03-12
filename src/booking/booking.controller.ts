@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UUID } from 'src/utils';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 
+@ApiTags('Bookings')
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
@@ -13,11 +15,6 @@ export class BookingController {
     return this.bookingService.create(createBookingDto);
   }
 
-  @Get()
-  findAll() {
-    return this.bookingService.findAll();
-  }
-
   @Get(':id')
   findOne(@UUID('id') id: string) {
     return this.bookingService.findOne(id);
@@ -25,11 +22,11 @@ export class BookingController {
 
   @Patch(':id')
   update(@UUID('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
-    return this.bookingService.update(+id, updateBookingDto);
+    return this.bookingService.update(id, updateBookingDto);
   }
 
   @Delete(':id')
   delete(@UUID('id') id: string) {
-    return this.bookingService.delete(+id);
+    return this.bookingService.delete(id);
   }
 }

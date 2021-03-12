@@ -1,10 +1,10 @@
-import { ExecutionContext } from '@nestjs/common';
+import { applyDecorators, ExecutionContext } from '@nestjs/common';
 import { createParamDecorator, NotFoundException } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
 import { Request } from 'express';
 import { Booking } from 'src/booking/entities/booking.entity';
-import { GameQuantities } from 'src/booking/entities/game-quantities';
+import { GameQuantities } from 'src/booking/entities/game-quantities.entity';
 import { TableQuantities } from 'src/booking/entities/table-quantities.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { Contact } from 'src/company/entities/contact.entity';

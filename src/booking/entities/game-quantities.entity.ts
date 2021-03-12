@@ -1,5 +1,6 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Area } from 'src/festival/entities/area.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Booking } from './booking.entity';
 
 @Entity()
@@ -35,11 +36,13 @@ export class GameQuantities {
 
   // Relations
 
+  @ApiHideProperty()
   @ManyToOne(() => Booking, (booking) => booking.gameQuantities, {
     primary: true,
   })
   booking: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Area, { primary: true })
   area: Area;
 }

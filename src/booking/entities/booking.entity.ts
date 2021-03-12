@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { GameQuantities } from './game-quantities';
+import { GameQuantities } from './game-quantities.entity';
 import { TableQuantities } from './table-quantities.entity';
 
 @Entity()
