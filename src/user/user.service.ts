@@ -6,8 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isConstraint } from 'src/utils';
-import { Repository } from 'typeorm';
+import { hasNoFields, isConstraint } from 'src/utils';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UQ_NAME, User } from './entities/user.entity';
@@ -86,8 +86,23 @@ export class UserService {
     }
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    if (hasNoFields(updateUserDto)) {
+      return new BadRequestException('You must specify fields to update');
+    }
+
+    let result: UpdateResult;
+    try {
+      result = await this.userRepository.update(id, updateUserDto);
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
+    return await this.findOne(id);
   }
 
   /**
