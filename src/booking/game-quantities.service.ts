@@ -28,9 +28,11 @@ export class GameQuantitiesService {
    * @returns the create game quantities
    */
   create(createGameQuantitiesDto: CreateGameQuantitiesDto) {
-    const { booking, ...dto } = createGameQuantitiesDto;
+    const { booking, area, game, ...dto } = createGameQuantitiesDto;
     return this.gameQuantitiesRepository.create({
       bookingId: booking,
+      gameId: game,
+      areaId: area,
       ...dto,
     });
   }
@@ -65,10 +67,11 @@ export class GameQuantitiesService {
       throw new BadRequestException('You must specify at least one field');
     }
 
-    const result = await this.gameQuantitiesRepository.update(
-      id,
-      updateGameQuantitiesDto,
-    );
+    const { area, ...dto } = updateGameQuantitiesDto;
+    const result = await this.gameQuantitiesRepository.update(id, {
+      areaId: area,
+      ...dto,
+    });
     if (result.affected === 0) {
       throw new NotFoundException();
     }

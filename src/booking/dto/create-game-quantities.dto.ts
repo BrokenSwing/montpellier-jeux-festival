@@ -33,4 +33,12 @@ export class CreateGameQuantitiesDto {
   @IsUUID()
   @IsNotEmpty()
   booking: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  game: string;
+
+  @IsUUID()
+  @IsOptional()
+  area: string;
 }
