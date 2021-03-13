@@ -1,10 +1,11 @@
 import { Controller, Patch, Post, Delete, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from 'src/utils';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
+@ApiBearerAuth()
 @ApiTags('Contacts')
 @Controller('contact')
 export class ContactController {

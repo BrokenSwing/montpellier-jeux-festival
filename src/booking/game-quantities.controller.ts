@@ -1,10 +1,11 @@
 import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from 'src/utils';
 import { CreateGameQuantitiesDto } from './dto/create-game-quantities.dto';
 import { UpdateGameQuantitiesDto } from './dto/update-game-quantities.dto';
 import { GameQuantitiesService } from './game-quantities.service';
 
+@ApiBearerAuth()
 @ApiTags('Game quantities')
 @Controller('api/game-quantities')
 export class GameQuantitiesController {

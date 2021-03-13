@@ -15,12 +15,21 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Montpellier Game Festival')
-    .setDescription('This document explain how to use the REST API of the Montpellier Game Festival')
+    .setDescription(
+      'This document explain how to use the REST API of the Montpellier Game Festival',
+    )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    operationIdFactory: (controllerKey, methodKey) => {
+      const controllerId = controllerKey.endsWith('Controller')
+        ? controllerKey.substring(0, controllerKey.length - 'Controller'.length)
+        : controllerKey;
+      return `${controllerId}->${methodKey}`;
+    },
+  });
   SwaggerModule.setup('api', app, document);
-  
 
   await app.listen(3000);
 }
