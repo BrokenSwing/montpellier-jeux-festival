@@ -52,7 +52,7 @@ export class AreaService {
       );
     }
 
-    let result = await this.areaRepository.update(areaId, updateAreaDto);
+    const result = await this.areaRepository.update(areaId, updateAreaDto);
 
     if (result.affected === 0) {
       throw new NotFoundException();

@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isConstraint } from 'src/utils';
 import { Repository } from 'typeorm';
@@ -23,18 +29,16 @@ export class UserService {
    */
   async create(createUserDto: CreateUserDto) {
     try {
-      const {password, ...result} = await this.userRepository.save(createUserDto);
+      const { password, ...result } = await this.userRepository.save(
+        createUserDto,
+      );
       return result;
     } catch (e) {
       if (isConstraint(e, UQ_NAME)) {
-        throw new BadRequestException(
-          'The given username is already used',
-        );
+        throw new BadRequestException('The given username is already used');
       }
       this.logger.error(e);
-      throw new InternalServerErrorException(
-        'Unable to create the given user',
-      );
+      throw new InternalServerErrorException('Unable to create the given user');
     }
   }
 
@@ -53,11 +57,10 @@ export class UserService {
    */
   async findOne(id: string) {
     const user = await this.userRepository.findOne(id);
-    if(user){
-      const {password, ...result} = user;
+    if (user) {
+      const { password, ...result } = user;
       return result;
-    }
-    else{
+    } else {
       throw new NotFoundException(`No user with UUID ${id} can be found`);
     }
   }
@@ -71,14 +74,15 @@ export class UserService {
   findByUsername(username: string) {
     const user = this.userRepository.find({
       where: {
-        username
-      }
+        username,
+      },
     });
-    if(user){
+    if (user) {
       return user;
-    }
-    else{
-      throw new NotFoundException(`No user with username ${username} can be found`);
+    } else {
+      throw new NotFoundException(
+        `No user with username ${username} can be found`,
+      );
     }
   }
 

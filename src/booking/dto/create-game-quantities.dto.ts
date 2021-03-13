@@ -1,5 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional, IsUUID, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 export class CreateGameQuantitiesDto {
   @Min(0)

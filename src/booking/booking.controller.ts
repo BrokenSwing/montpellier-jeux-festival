@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from 'src/utils';
 import { BookingService } from './booking.service';
@@ -22,7 +30,10 @@ export class BookingController {
   }
 
   @Patch(':id')
-  update(@Param('id', UUIDPipe) id: string, @Body() updateBookingDto: UpdateBookingDto) {
+  update(
+    @Param('id', UUIDPipe) id: string,
+    @Body() updateBookingDto: UpdateBookingDto,
+  ) {
     return this.bookingService.update(id, updateBookingDto);
   }
 

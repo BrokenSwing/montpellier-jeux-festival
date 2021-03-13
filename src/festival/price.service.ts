@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hasNoFields } from '../utils';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreatePriceDto } from './dto/create-price.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { Price } from './entities/prices.entity';
@@ -54,7 +54,7 @@ export class PriceService {
       );
     }
 
-    let result = await this.priceRepository.update(priceId, updatePriceDto);
+    const result = await this.priceRepository.update(priceId, updatePriceDto);
 
     if (result.affected === 0) {
       throw new NotFoundException();

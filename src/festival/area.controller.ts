@@ -23,6 +23,6 @@ export class AreaController {
 
   @Delete(':id')
   delete(@Param('id', UUIDPipe) id: string) {
-      return this.areaService.delete(id);
+    return this.areaService.delete(id);
   }
 }

@@ -36,7 +36,10 @@ export class CompanyController {
   }
 
   @Patch(':id')
-  update(@Param('id', UUIDPipe) id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+  update(
+    @Param('id', UUIDPipe) id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ) {
     return this.companyService.update(id, updateCompanyDto);
   }
 
