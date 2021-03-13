@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, Param } from '@nestjs/common';
 import { FestivalService } from './festival.service';
 import { CreateFestivalDto } from './dto/create-festival.dto';
 import { UpdateFestivalDto } from './dto/update-festival.dto';
-import { UUID } from '../utils';
+import { UUIDPipe } from '../utils';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Festivals')
@@ -21,12 +21,12 @@ export class FestivalController {
   }
 
   @Get(':id')
-  findOne(@UUID('id') id: string) {
+  findOne(@Param('id', UUIDPipe) id: string) {
     return this.festivalService.findOne(id);
   }
 
   @Patch(':id')
-  update(@UUID('id') id: string, @Body() updateFestivalDto: UpdateFestivalDto) {
+  update(@Param('id', UUIDPipe) id: string, @Body() updateFestivalDto: UpdateFestivalDto) {
     return this.festivalService.update(id, updateFestivalDto);
   }
 }

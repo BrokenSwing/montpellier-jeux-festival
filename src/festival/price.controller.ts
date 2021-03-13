@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { CreatePriceDto } from './dto/create-price.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { PriceService } from './price.service';
@@ -12,7 +12,7 @@ export class PriceController {
 
   @Patch(':id')
   updatePrice(
-    @UUID('id') priceId: string,
+    @Param('id', UUIDPipe) priceId: string,
     @Body() updatePriceDto: UpdatePriceDto,
   ) {
     return this.priceService.update(priceId, updatePriceDto);
@@ -24,7 +24,7 @@ export class PriceController {
   }
 
   @Delete(':id')
-  deletePrice(@UUID('id') priceId: string) {
+  deletePrice(@Param('id', UUIDPipe) priceId: string) {
     return this.priceService.delete(priceId);
   }
 }

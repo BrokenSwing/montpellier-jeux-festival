@@ -1,6 +1,6 @@
-import { Controller, Patch, Post, Delete } from '@nestjs/common';
+import { Controller, Patch, Post, Delete, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -16,12 +16,12 @@ export class ContactController {
   }
 
   @Patch(':id')
-  updateContact(@UUID('id') id: string, updateContactDto: UpdateContactDto) {
+  updateContact(@Param('id', UUIDPipe) id: string, updateContactDto: UpdateContactDto) {
     return this.contactService.update(id, updateContactDto);
   }
 
   @Delete(':id')
-  deleteContact(@UUID('contactId') contactId: string) {
+  deleteContact(@Param('contactId', UUIDPipe) contactId: string) {
     return this.contactService.delete(contactId);
   }
 }

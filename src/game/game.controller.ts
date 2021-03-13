@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, Param } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Games')
 @Controller('api/game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
@@ -19,17 +21,17 @@ export class GameController {
   }
 
   @Get(':id')
-  findOneGame(@UUID('id') id: string) {
+  findOneGame(@Param('id', UUIDPipe) id: string) {
     return this.gameService.findOne(id);
   }
 
   @Patch(':id')
-  updateGame(@UUID('id') id: string, @Body() updateGameDto: UpdateGameDto) {
+  updateGame(@Param('id', UUIDPipe) id: string, @Body() updateGameDto: UpdateGameDto) {
     return this.gameService.update(id, updateGameDto);
   }
 
   @Delete(':id')
-  deleteGame(@UUID('id') id: string) {
+  deleteGame(@Param('id', UUIDPipe) id: string) {
     return this.gameService.remove(id);
   }
 }

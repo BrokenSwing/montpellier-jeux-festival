@@ -1,8 +1,11 @@
-import { applyDecorators, ExecutionContext } from '@nestjs/common';
-import { createParamDecorator, NotFoundException } from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
-import { Request } from 'express';
 import { Booking } from 'src/booking/entities/booking.entity';
 import { GameQuantities } from 'src/booking/entities/game-quantities.entity';
 import { TableQuantities } from 'src/booking/entities/table-quantities.entity';
@@ -37,21 +40,17 @@ export function isConstraint(e: any, constraintName: string) {
 }
 
 /**
- * A decorator that extracts an UUID from the route parameters.
- * If the extracted value is not an UUID, a BadRequestException is thrown.
- *
- * @param name The name of the parameter in the route
+ * A pipe that checks if the value is an UUID.
  */
-export const UUID = createParamDecorator<string>(
-  (data: string, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest() as Request;
-    const uuid = request.params[data];
-    if (uuid && isUUID(uuid)) {
-      return uuid;
+@Injectable()
+export class UUIDPipe implements PipeTransform<string, string> {
+  transform(value: string, _: ArgumentMetadata): string {
+    if (!isUUID(value)) {
+      throw new NotFoundException();
     }
-    throw new NotFoundException();
-  },
-);
+    return value;
+  }
+}
 
 /**
  * @returns the typeorm module featuring all entities

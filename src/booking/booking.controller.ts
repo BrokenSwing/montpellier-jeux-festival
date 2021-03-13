@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -16,17 +16,17 @@ export class BookingController {
   }
 
   @Get(':id')
-  findOne(@UUID('id') id: string) {
+  findOne(@Param('id', UUIDPipe) id: string) {
     return this.bookingService.findOne(id);
   }
 
   @Patch(':id')
-  update(@UUID('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
+  update(@Param('id', UUIDPipe) id: string, @Body() updateBookingDto: UpdateBookingDto) {
     return this.bookingService.update(id, updateBookingDto);
   }
 
   @Delete(':id')
-  delete(@UUID('id') id: string) {
+  delete(@Param('id', UUIDPipe) id: string) {
     return this.bookingService.delete(id);
   }
 }

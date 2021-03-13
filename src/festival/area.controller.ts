@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { AreaService } from './area.service';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
@@ -16,12 +16,12 @@ export class AreaController {
   }
 
   @Patch(':id')
-  update(@UUID('id') id: string, updateAreaDto: UpdateAreaDto) {
+  update(@Param('id', UUIDPipe) id: string, updateAreaDto: UpdateAreaDto) {
     return this.areaService.update(id, updateAreaDto);
   }
 
   @Delete(':id')
-  delete(@UUID('id') id: string) {
+  delete(@Param('id', UUIDPipe) id: string) {
       return this.areaService.delete(id);
   }
 }

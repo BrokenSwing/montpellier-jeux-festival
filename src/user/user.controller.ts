@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -24,19 +24,19 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@UUID('id') id: string) {
+  findOne(@Param('id', UUIDPipe) id: string) {
     return this.userService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@UUID('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id', UUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@UUID('id') id: string) {
+  remove(@Param('id', UUIDPipe) id: string) {
     return this.userService.remove(id);
   }
 }

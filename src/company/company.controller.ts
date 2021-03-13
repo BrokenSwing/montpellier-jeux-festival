@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UUID } from 'src/utils';
+import { UUIDPipe } from 'src/utils';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
@@ -30,17 +30,17 @@ export class CompanyController {
   }
 
   @Get(':id')
-  findOne(@UUID('id') id: string) {
+  findOne(@Param('id', UUIDPipe) id: string) {
     return this.companyService.findOne(id);
   }
 
   @Patch(':id')
-  update(@UUID('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+  update(@Param('id', UUIDPipe) id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.update(id, updateCompanyDto);
   }
 
   @Delete(':id')
-  delete(@UUID('id') id: string) {
+  delete(@Param('id', UUIDPipe) id: string) {
     return this.companyService.delete(id);
   }
 }
