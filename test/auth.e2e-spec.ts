@@ -8,6 +8,8 @@ import {
   clearDatabase,
 } from './fixtures';
 import { AuthModule } from '../src/auth/auth.module';
+import { PasswordService } from '../src/user/password.service';
+import { PlainPasswordService } from './mock/password.service';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -16,7 +18,10 @@ describe('AuthController (e2e)', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [testDatabaseAccess(), AuthModule],
-    }).compile();
+    })
+      .overrideProvider(PasswordService)
+      .useClass(PlainPasswordService)
+      .compile();
 
     connection = moduleFixture.get(Connection);
 
