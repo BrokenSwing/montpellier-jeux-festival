@@ -18,7 +18,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --detectOpenHandles --config ./test/jest-e2e.json",
     "start:db": "docker-compose -f docker-compose.yml up"
   },
   "dependencies": {
@@ -67,6 +67,7 @@
     "ts-loader": "^8.0.17",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
+    "typeorm-fixtures-cli": "^1.9.1",
     "typescript": "^4.1.5"
   },
   "jest": {
