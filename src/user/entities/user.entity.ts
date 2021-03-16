@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-export const UQ_NAME = 'UQ_USERNAME';
+export const UQ_USERNAME = 'UQ_USERNAME';
 
 @Entity()
-@Unique(UQ_NAME, ['username'])
+@Unique(UQ_USERNAME, ['username'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;

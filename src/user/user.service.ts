@@ -10,7 +10,7 @@ import { hasNoFields, isConstraint } from '../utils';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UQ_NAME, User } from './entities/user.entity';
+import { UQ_USERNAME, User } from './entities/user.entity';
 import { PasswordService } from './password.service';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class UserService {
       );
       return result;
     } catch (e) {
-      if (isConstraint(e, UQ_NAME)) {
+      if (isConstraint(e, UQ_USERNAME)) {
         throw new BadRequestException('The given username is already used');
       }
       this.logger.error(e);
@@ -110,6 +110,9 @@ export class UserService {
     try {
       result = await this.userRepository.update(id, updateUserDto);
     } catch (e) {
+      if (isConstraint(e, UQ_USERNAME)) {
+        throw new BadRequestException('The given username is already used.');
+      }
       this.logger.error(e);
       throw new InternalServerErrorException();
     }

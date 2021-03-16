@@ -133,4 +133,18 @@ describe('UserController (e2e)', () => {
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });
+
+  describe('/api/user (PATCH)', () => {
+    const endpoint = '/api/user/ae6e043e-91bd-4a2d-9abd-1217736ca40b';
+
+    it('should return bad rquest exception if new username is already used', () => {
+      return request(app.getHttpServer())
+        .patch(endpoint)
+        .auth(adminToken, { type: 'bearer' })
+        .send({
+          username: 'Axel',
+        })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+  });
 });
