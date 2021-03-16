@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Price } from 'src/festival/entities/prices.entity';
+import { Price } from '../../festival/entities/prices.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Booking } from './booking.entity';
 

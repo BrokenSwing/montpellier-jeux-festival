@@ -18,7 +18,7 @@ export class CreateBookingDto {
   needVolunteers: boolean;
 
   @IsBoolean()
-  isPreset: boolean;
+  isPresent: boolean;
 
   @IsBoolean()
   isPlaced: boolean;
@@ -33,6 +33,10 @@ export class CreateBookingDto {
 
   @IsDate()
   @Type(() => Date)
+  createdOn: Date;
+
+  @IsDate()
+  @Type(() => Date)
   @IsOptional()
   billSentOn?: Date;
 
@@ -44,4 +48,8 @@ export class CreateBookingDto {
   @IsUUID()
   @IsNotEmpty()
   festival: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  company: string;
 }

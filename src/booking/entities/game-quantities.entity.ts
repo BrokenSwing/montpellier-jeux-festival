@@ -1,6 +1,6 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Area } from 'src/festival/entities/area.entity';
-import { Game } from 'src/game/entities/game.entity';
+import { Area } from '../../festival/entities/area.entity';
+import { Game } from '../../game/entities/game.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Booking } from './booking.entity';
 

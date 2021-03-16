@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hasNoFields } from 'src/utils';
+import { hasNoFields } from '../utils';
 import { Repository } from 'typeorm';
 import { CreateTableQuantitiesDto } from './dto/create-table-quantities.dto';
 import { UpdateTableQuantitiesDto } from './dto/update-table-quantities.dto';

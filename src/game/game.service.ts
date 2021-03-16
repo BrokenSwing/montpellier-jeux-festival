@@ -6,8 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Company } from 'src/company/entities/company.entity';
-import { hasNoFields, isConstraint } from 'src/utils';
+import { Company } from '../company/entities/company.entity';
+import { hasNoFields, isConstraint } from '../utils';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Game } from 'src/game/entities/game.entity';
+import { Game } from '../../game/entities/game.entity';
 
 @Entity()
 export class Company {

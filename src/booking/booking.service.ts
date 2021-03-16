@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hasNoFields } from 'src/utils';
+import { hasNoFields, isForeignKeyError } from '../utils';
 import { Repository } from 'typeorm';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -25,12 +25,22 @@ export class BookingService {
    * @param createBookingDto The data to create the booking
    * @returns the created booking
    */
-  create(createBookingDto: CreateBookingDto) {
-    const { festival, ...dto } = createBookingDto;
-    return this.bookingRepository.create({
-      ...dto,
-      festivalId: festival,
-    });
+  async create(createBookingDto: CreateBookingDto) {
+    const { festival, company, ...dto } = createBookingDto;
+    try {
+      return await this.bookingRepository.save({
+        ...dto,
+        festivalId: festival,
+        companyId: company,
+      });
+    } catch (e) {
+      if (isForeignKeyError(e)) {
+        throw new BadRequestException(
+          'Either one of or both of given values for `festival` and `company` are invalid.'
+        );
+      }
+      throw e;
+    }
   }
 
   /**

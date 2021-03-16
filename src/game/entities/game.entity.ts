@@ -1,5 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
-import { Company } from 'src/company/entities/company.entity';
+import { Company } from '../../company/entities/company.entity';
 import {
   Column,
   Entity,

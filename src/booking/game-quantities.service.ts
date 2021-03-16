@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hasNoFields } from 'src/utils';
+import { hasNoFields } from '../utils';
 import { Repository } from 'typeorm';
 import { CreateGameQuantitiesDto } from './dto/create-game-quantities.dto';
 import { UpdateGameQuantitiesDto } from './dto/update-game-quantities.dto';

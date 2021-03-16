@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UUIDPipe } from 'src/utils';
+import { UUIDPipe } from '../utils';
 import { CreateGameQuantitiesDto } from './dto/create-game-quantities.dto';
 import { UpdateGameQuantitiesDto } from './dto/update-game-quantities.dto';
 import { GameQuantitiesService } from './game-quantities.service';
