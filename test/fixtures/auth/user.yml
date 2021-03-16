@@ -1,0 +1,7 @@
+entity: user
+items:
+  florent:
+    id: ae6e043e-91bd-4a2d-9abd-1217736ca40b
+    username: florent
+    password: my-password
+    isAdmin: true

@@ -28,6 +28,25 @@ export async function applyDataFixtures(connection: Connection, name: string) {
   }
 }
 
+export async function clearDatabase(connection: Connection) {
+  const queryRunner = connection.createQueryRunner();
+
+  await queryRunner.query(`
+    DO
+    $func$
+    BEGIN
+      EXECUTE (
+        SELECT 'TRUNCATE TABLE ' || string_agg(oid::regclass::text, ', ') || ' CASCADE'
+          FROM pg_class
+          WHERE relkind = 'r'
+          AND relnamespace = 'public'::regnamespace
+      );
+    END
+    $func$;
+  `);
+  await queryRunner.release();
+}
+
 export function testDatabaseAccess() {
   return TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
