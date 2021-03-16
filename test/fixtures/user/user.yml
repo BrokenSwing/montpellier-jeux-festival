@@ -1,0 +1,12 @@
+entity: user
+items:
+  lilian:
+    id: ae6e043e-91bd-4a2d-9abd-1217736ca40b
+    username: Lilian
+    password: his password
+    isAdmin: true
+  axel:
+    id: 12345678-aaaa-bbbb-cccc-1217736ca40b
+    username: Axel
+    password: his password too
+    isAdmin: false

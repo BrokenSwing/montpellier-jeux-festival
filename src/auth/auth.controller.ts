@@ -2,15 +2,14 @@ import {
   Controller,
   Post,
   UseGuards,
-  Request,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
-import { Request as Req } from 'express';
-import { User } from '../user/entities/user.entity';
+import { LoggedUser } from './user.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -20,7 +19,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Request() req: Req & { user: User }) {
-    return this.authService.login(req.user);
+  async login(@LoggedUser() user: User) {
+    return this.authService.login(user);
   }
 }
