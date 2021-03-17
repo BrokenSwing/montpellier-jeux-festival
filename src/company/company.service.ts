@@ -1,15 +1,16 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hasNoFields } from '../utils';
+import { hasNoFields, isConstraint } from '../utils';
 import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { Company } from './entities/company.entity';
+import { Company, UQ_COMPANY_NAME } from './entities/company.entity';
 
 /**
  * This service is responsible to manage companies.
@@ -26,8 +27,16 @@ export class CompanyService {
    * @param createCompanyDto The data to create the company
    * @returns the create company
    */
-  create(createCompanyDto: CreateCompanyDto) {
-    return this.companyRepository.save(createCompanyDto);
+  async create(createCompanyDto: CreateCompanyDto) {
+    try{
+      return await this.companyRepository.save(createCompanyDto);
+    }
+    catch(e){
+      if(isConstraint(e, UQ_COMPANY_NAME)){
+        throw new BadRequestException('The given company name is already used');
+      }
+      throw new InternalServerErrorException();
+    }
   }
 
   /**
