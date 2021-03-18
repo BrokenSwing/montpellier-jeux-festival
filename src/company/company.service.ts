@@ -28,11 +28,10 @@ export class CompanyService {
    * @returns the create company
    */
   async create(createCompanyDto: CreateCompanyDto) {
-    try{
+    try {
       return await this.companyRepository.save(createCompanyDto);
-    }
-    catch(e){
-      if(isConstraint(e, UQ_COMPANY_NAME)){
+    } catch (e) {
+      if (isConstraint(e, UQ_COMPANY_NAME)) {
         throw new BadRequestException('The given company name is already used');
       }
       throw new InternalServerErrorException();
@@ -46,13 +45,35 @@ export class CompanyService {
    * @returns the companies matching the filter
    */
   findAll(findCompanyDto: FindCompanyDto) {
-    return this.companyRepository.find({
-      where: {
-        isPublisher: findCompanyDto.publisher,
-        isExhibitor: findCompanyDto.exhibitor,
-        isActive: findCompanyDto.active,
-      },
-    });
+    if (hasNoFields(findCompanyDto)) {
+      return this.companyRepository.find({ where: { isActive: true } });
+    } else {
+      if (findCompanyDto.publisher && findCompanyDto.exhibitor) {
+        return this.companyRepository.find({
+          where: {
+            isPublisher: findCompanyDto.publisher,
+            isExhibitor: findCompanyDto.exhibitor,
+            isActive: findCompanyDto.active ? findCompanyDto.active : true,
+          },
+        });
+      } else {
+        if (findCompanyDto.publisher) {
+          return this.companyRepository.find({
+            where: {
+              isPublisher: findCompanyDto.publisher,
+              isActive: findCompanyDto.active ? findCompanyDto.active : true,
+            },
+          });
+        } else {
+          return this.companyRepository.find({
+            where: {
+              isExhibitor: findCompanyDto.exhibitor,
+              isActive: findCompanyDto.active ? findCompanyDto.active : true,
+            },
+          });
+        }
+      }
+    }
   }
 
   /**

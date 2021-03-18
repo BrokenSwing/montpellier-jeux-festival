@@ -6,6 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseBoolPipe,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from '../utils';
@@ -26,8 +30,8 @@ export class CompanyController {
   }
 
   @Get()
-  findAll(@Param() findCompanyDto: FindCompanyDto) {
-    return this.companyService.findAll(findCompanyDto);
+  findAll(@Query() query: FindCompanyDto) {
+    return this.companyService.findAll(query);
   }
 
   @Get(':id')

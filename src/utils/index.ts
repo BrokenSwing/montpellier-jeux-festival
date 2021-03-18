@@ -73,7 +73,7 @@ export const allEntities = [
   TableQuantities,
   GameQuantities,
   Game,
-  User
+  User,
 ];
 
 /**
