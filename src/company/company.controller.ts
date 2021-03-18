@@ -7,9 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  ParseBoolPipe,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from '../utils';
