@@ -21,6 +21,9 @@ export class Contact {
   @Column()
   phone: string;
 
+  @Column()
+  isPrimary: boolean;
+
   // Foreign keys
 
   @Column()

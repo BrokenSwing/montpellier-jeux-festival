@@ -20,7 +20,11 @@ import { Game } from '../game/entities/game.entity';
  * @returns true if no fields can be found on the given object
  */
 export function hasNoFields(obj: any) {
-  return Object.keys(obj).length === 0;
+  if (obj) {
+    return Object.keys(obj).length === 0;
+  } else {
+    return false;
+  }
 }
 
 /**

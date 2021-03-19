@@ -26,10 +26,10 @@ export class ContactService {
    * @returns the created contact
    */
   create(createContactDto: CreateContactDto) {
-    const { company, ...dto } = createContactDto;
+    const { companyId, ...dto } = createContactDto;
     return this.contactRepository.save({
       ...dto,
-      companyId: company,
+      companyId: companyId,
     });
   }
 
@@ -56,18 +56,14 @@ export class ContactService {
    * @param updateContactDto The data to update the contact
    * @return the updated contact
    */
-  async update(contactId: string, updateContactDto: UpdateContactDto) {
+  update(contactId: string, updateContactDto: UpdateContactDto) {
     if (hasNoFields(updateContactDto)) {
       throw new BadRequestException('You must specify at least one field');
     }
-    const result = await this.contactRepository.update(
-      contactId,
+    return this.contactRepository.save({
+      id: contactId,
       updateContactDto,
-    );
-    if (result.affected === 0) {
-      throw new NotFoundException();
-    }
-    return this.findOne(contactId);
+    });
   }
 
   /**
