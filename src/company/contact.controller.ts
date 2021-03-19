@@ -25,7 +25,7 @@ export class ContactController {
   }
 
   @Delete(':id')
-  deleteContact(@Param('contactId', UUIDPipe) contactId: string) {
+  deleteContact(@Param('id', UUIDPipe) contactId: string) {
     return this.contactService.delete(contactId);
   }
 }
