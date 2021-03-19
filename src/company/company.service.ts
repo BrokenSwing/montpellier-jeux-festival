@@ -84,7 +84,9 @@ export class CompanyService {
    * @returns the company with the given id
    */
   async findOne(id: string) {
-    const company = await this.companyRepository.findOne(id);
+    const company = await this.companyRepository.findOne(id, {
+      relations: ['contacts'],
+    });
     if (company) {
       return company;
     }

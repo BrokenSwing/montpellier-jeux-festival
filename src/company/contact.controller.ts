@@ -1,4 +1,4 @@
-import { Controller, Patch, Post, Delete, Param } from '@nestjs/common';
+import { Controller, Patch, Post, Delete, Param, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UUIDPipe } from '../utils';
 import { ContactService } from './contact.service';
@@ -7,12 +7,12 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 
 @ApiBearerAuth()
 @ApiTags('Contacts')
-@Controller('contact')
+@Controller('api/contact')
 export class ContactController {
   constructor(private contactService: ContactService) {}
 
   @Post()
-  create(createContactDto: CreateContactDto) {
+  create(@Body() createContactDto: CreateContactDto) {
     return this.contactService.create(createContactDto);
   }
 

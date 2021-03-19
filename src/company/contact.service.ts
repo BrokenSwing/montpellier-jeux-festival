@@ -27,7 +27,7 @@ export class ContactService {
    */
   create(createContactDto: CreateContactDto) {
     const { company, ...dto } = createContactDto;
-    return this.contactRepository.create({
+    return this.contactRepository.save({
       ...dto,
       companyId: company,
     });
