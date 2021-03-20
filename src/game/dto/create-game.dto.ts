@@ -1,10 +1,18 @@
-import { IsInt, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateGameDto {
+  @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   duration: string;
 
   @IsInt()
@@ -18,6 +26,9 @@ export class CreateGameDto {
 
   @IsInt()
   maxAge: number;
+
+  @IsBoolean()
+  isPrototype: boolean;
 
   @IsUUID()
   publisherId: string;

@@ -62,7 +62,7 @@ export class ContactService {
     }
     return this.contactRepository.save({
       id: contactId,
-      updateContactDto,
+      ...updateContactDto,
     });
   }
 

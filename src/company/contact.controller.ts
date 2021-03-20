@@ -19,7 +19,7 @@ export class ContactController {
   @Patch(':id')
   updateContact(
     @Param('id', UUIDPipe) id: string,
-    updateContactDto: UpdateContactDto,
+    @Body() updateContactDto: UpdateContactDto,
   ) {
     return this.contactService.update(id, updateContactDto);
   }

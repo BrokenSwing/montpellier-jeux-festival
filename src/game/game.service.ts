@@ -62,24 +62,14 @@ export class GameService {
     throw new NotFoundException(`No game with UUID ${id} can be found`);
   }
 
-  async update(id: string, updateGameDto: UpdateGameDto) {
+  update(id: string, updateGameDto: UpdateGameDto) {
     if (hasNoFields(updateGameDto)) {
       return new BadRequestException('You must specify fields to update');
     }
-    let updateResult: UpdateResult;
-    try {
-      updateResult = await this.gameRepository.update(id, updateGameDto);
-      if (updateResult.affected === 0) {
-        throw new NotFoundException();
-      }
-      return await this.findOne(id);
-    } catch (e) {
-      this.logger.error(e);
-      if (isConstraint(e, UQ_GAME_NAME)) {
-        throw new BadRequestException('The given game name is already used');
-      }
-      throw new InternalServerErrorException();
-    }
+    return this.gameRepository.save({
+      id: id,
+      ...updateGameDto,
+    });
   }
 
   async remove(id: string) {
