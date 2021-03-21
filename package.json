@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --detectOpenHandles --config ./test/jest-e2e.json",
-    "start:db": "docker-compose -f docker-compose.yml up"
+    "start:db": "docker-compose -f docker-compose.yml up",
+    "inspect:db": "docker exec -it mtp_jfest_postgres psql -U postgres -d postgres"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",

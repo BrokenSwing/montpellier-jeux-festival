@@ -136,4 +136,24 @@ export class UserService {
     }
     return { deleted: true };
   }
+
+  /**
+   * Creates a default admin/admin user
+   * if the user table is empty.
+   */
+  async createDefaultUserIfRequired() {
+    const count = await this.userRepository.count({
+      where: {
+        isAdmin: true,
+      },
+    });
+    if (count > 0) {
+      return;
+    }
+    await this.create({
+      username: 'admin',
+      password: 'admin',
+      isAdmin: true,
+    });
+  }
 }
