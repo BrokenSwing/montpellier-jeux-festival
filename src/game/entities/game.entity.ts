@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { GameType } from './game-type.entity';
 export const UQ_GAME_NAME = 'UQ_GAME_NAME';
 
 @Entity()
@@ -36,14 +37,24 @@ export class Game {
   @Column({ default: false })
   isPrototype: boolean;
 
+  @Column({ nullable: true })
+  manualLink: string;
+
   // Foreign keys
 
   @Column()
   publisherId: string;
+
+  @Column()
+  gameTypeId: string;
 
   // Relations
 
   @ApiHideProperty()
   @ManyToOne(() => Company, (publisher) => publisher.games)
   publisher: Company;
+
+  @ApiHideProperty()
+  @ManyToOne(() => GameType, (gameType) => gameType.games)
+  gameType: GameType;
 }

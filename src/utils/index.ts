@@ -12,6 +12,7 @@ import { Area } from '../festival/entities/area.entity';
 import { Festival } from '../festival/entities/festival.entity';
 import { Price } from '../festival/entities/prices.entity';
 import { Game } from '../game/entities/game.entity';
+import { GameType } from 'src/game/entities/game-type.entity';
 
 /**
  * Checks whether or not the passed object has field.
@@ -78,6 +79,7 @@ export const allEntities = [
   GameQuantities,
   Game,
   User,
+  GameType,
 ];
 
 /**
