@@ -33,6 +33,9 @@ export class CreateGameDto {
   @IsUUID()
   publisherId: string;
 
-  @IsUUID()
-  gameTypeId: string;
+  @IsString()
+  @IsNotEmpty()
+  type: string;
+
+  guideLink: string;
 }

@@ -29,6 +29,11 @@ export class GameController {
     return this.gameService.findAll();
   }
 
+  @Get('types')
+  findAllGameTypes() {
+    return this.gameService.findAllGameTypes();
+  }
+
   @Get(':id')
   findOneGame(@Param('id', UUIDPipe) id: string) {
     return this.gameService.findOne(id);

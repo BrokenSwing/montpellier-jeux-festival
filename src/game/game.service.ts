@@ -8,7 +8,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { hasNoFields, isConstraint } from '../utils';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  createQueryBuilder,
+  DeleteResult,
+  getConnection,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game, UQ_GAME_NAME } from './entities/game.entity';
@@ -51,13 +57,19 @@ export class GameService {
   }
 
   findAll() {
-    return this.gameRepository.find({ relations: ['gameType'] });
+    return this.gameRepository.find();
+  }
+
+  findAllGameTypes() {
+    return this.gameRepository
+      .createQueryBuilder()
+      .select('type')
+      .distinct(true)
+      .getRawMany();
   }
 
   async findOne(id: string) {
-    const game = await this.gameRepository.findOne(id, {
-      relations: ['gameType'],
-    });
+    const game = await this.gameRepository.findOne(id);
     if (game) {
       return game;
     }
