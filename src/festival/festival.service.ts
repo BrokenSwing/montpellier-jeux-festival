@@ -50,7 +50,11 @@ export class FestivalService {
    * @returns all the festivals
    */
   findAll() {
-    return this.festivalRepository.find();
+    return this.festivalRepository.find({
+      order: {
+        date: 'DESC',
+      },
+    });
   }
 
   /**
