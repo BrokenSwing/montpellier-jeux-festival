@@ -15,13 +15,21 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 
 @ApiBearerAuth()
 @ApiTags('Bookings')
-@Controller('booking')
+@Controller('api/booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingService.create(createBookingDto);
+  }
+
+  /**
+   * Allows to list all bookings from festival.
+   */
+  @Get('/festival/:id')
+  findAll(@Param('id', UUIDPipe) id: string) {
+    return this.bookingService.findAllForFestival(id);
   }
 
   @Get(':id')
