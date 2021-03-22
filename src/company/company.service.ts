@@ -46,7 +46,7 @@ export class CompanyService {
    */
   findAll(findCompanyDto: FindCompanyDto) {
     if (hasNoFields(findCompanyDto)) {
-      return this.companyRepository.find({ where: { isActive: true } });
+      return this.companyRepository.find();
     } else {
       if (findCompanyDto.publisher && findCompanyDto.exhibitor) {
         return this.companyRepository.find({
