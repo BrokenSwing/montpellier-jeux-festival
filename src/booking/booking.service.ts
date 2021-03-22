@@ -55,6 +55,7 @@ export class BookingService {
       where: {
         festivalId,
       },
+      relations: ['company'],
     });
   }
 
