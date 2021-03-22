@@ -7,8 +7,10 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UUIDPipe } from '../utils';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -17,6 +19,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @ApiBearerAuth()
 @ApiTags('Companies')
+@UseGuards(JwtAuthGuard)
 @Controller('api/company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
