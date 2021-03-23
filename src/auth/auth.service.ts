@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/entities/user.entity';
 import { PasswordService } from '../user/password.service';
@@ -30,10 +30,32 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
-    const payload = { username: user.username, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
+  async generateTokens(user: { username: string, id: string }) {
+    const accessTokenPayload = {
+      username: user.username,
+      sub: user.id,
+      access_token: true,
     };
+    const refreshTokenPayload = {
+      sub: user.id,
+      refresh_token: true,
+    };
+    return {
+      access_token: await this.jwtService.signAsync(accessTokenPayload),
+      refresh_token: await this.jwtService.signAsync(refreshTokenPayload, {
+        expiresIn: '2d',
+      }),
+    };
+  }
+
+  async refresh(refreshToken: string) {
+    const data = await this.jwtService.verifyAsync<{ sub: string, refresh_token?: boolean }>(refreshToken);
+    if (data.refresh_token) {
+      const user = await this.usersService.findOne(data.sub);
+      if (user) {
+        return await this.generateTokens(user);
+      }
+    }
+    throw new BadRequestException('The provided token is not a refresh token');
   }
 }

@@ -4,10 +4,13 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Body,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 import { LoggedUser } from './user.decorator';
 
@@ -16,10 +19,18 @@ import { LoggedUser } from './user.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiBody({
+    type: LoginDto,
+  })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@LoggedUser() user: User) {
-    return this.authService.login(user);
+  login(@LoggedUser() user: User) {
+    return this.authService.generateTokens(user);
+  }
+
+  @Post('refresh')
+  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refresh(refreshTokenDto.refresh_token);
   }
 }
