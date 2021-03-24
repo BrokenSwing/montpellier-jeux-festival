@@ -54,6 +54,7 @@ export class FestivalService {
       order: {
         date: 'DESC',
       },
+      relations: ['prices', 'areas'],
     });
   }
 
@@ -64,7 +65,9 @@ export class FestivalService {
    * @returns the festival with the given id
    */
   async findOne(id: string) {
-    const festival = await this.festivalRepository.findOne(id);
+    const festival = await this.festivalRepository.findOne(id, {
+      relations: ['prices', 'areas'],
+    });
     if (festival) {
       return festival;
     }
