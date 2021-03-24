@@ -14,6 +14,9 @@ export class CreateBookingDto {
   @IsString()
   notes: string;
 
+  @IsString()
+  exchanges: string;
+
   @IsBoolean()
   needVolunteers: boolean;
 

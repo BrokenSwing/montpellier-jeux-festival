@@ -19,6 +19,12 @@ export class Booking {
   @Column('text')
   notes: string;
 
+  @Column({
+    type: 'text',
+    default: '',
+  })
+  exchanges: string;
+
   @Column()
   needVolunteers: boolean;
 
