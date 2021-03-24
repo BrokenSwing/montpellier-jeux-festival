@@ -30,11 +30,16 @@ export class AuthService {
     return null;
   }
 
-  async generateTokens(user: { username: string, id: string }) {
+  async generateTokens(user: {
+    username: string;
+    id: string;
+    isAdmin: boolean;
+  }) {
     const accessTokenPayload = {
       username: user.username,
       sub: user.id,
       access_token: true,
+      isAdmin: user.isAdmin,
     };
     const refreshTokenPayload = {
       sub: user.id,
@@ -49,7 +54,10 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
-    const data = await this.jwtService.verifyAsync<{ sub: string, refresh_token?: boolean }>(refreshToken);
+    const data = await this.jwtService.verifyAsync<{
+      sub: string;
+      refresh_token?: boolean;
+    }>(refreshToken);
     if (data.refresh_token) {
       const user = await this.usersService.findOne(data.sub);
       if (user) {
