@@ -42,7 +42,8 @@ export class GameService {
     }
     if (res) {
       try {
-        return await this.gameRepository.save(createGameDto);
+        let res = await this.gameRepository.save(createGameDto);
+        return await this.findOne(res.id);
       } catch (e) {
         if (isConstraint(e, UQ_GAME_NAME)) {
           throw new BadRequestException('The given game name is already used');
@@ -80,14 +81,15 @@ export class GameService {
     throw new NotFoundException(`No game with UUID ${id} can be found`);
   }
 
-  update(id: string, updateGameDto: UpdateGameDto) {
+  async update(id: string, updateGameDto: UpdateGameDto) {
     if (hasNoFields(updateGameDto)) {
       return new BadRequestException('You must specify fields to update');
     }
-    return this.gameRepository.save({
+    let res = await this.gameRepository.save({
       id: id,
       ...updateGameDto,
     });
+    return await this.findOne(res.id);
   }
 
   async remove(id: string) {
