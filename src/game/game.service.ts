@@ -57,7 +57,9 @@ export class GameService {
   }
 
   findAll() {
-    return this.gameRepository.find();
+    return this.gameRepository.find({
+      relations: ['publisher'],
+    });
   }
 
   findAllGameTypes() {
@@ -69,7 +71,9 @@ export class GameService {
   }
 
   async findOne(id: string) {
-    const game = await this.gameRepository.findOne(id);
+    const game = await this.gameRepository.findOne(id, {
+      relations: ['publisher'],
+    });
     if (game) {
       return game;
     }
