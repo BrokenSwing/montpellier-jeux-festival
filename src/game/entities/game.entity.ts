@@ -1,16 +1,8 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Company } from '../../company/entities/company.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
-export const UQ_GAME_NAME = 'UQ_GAME_NAME';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-@Unique(UQ_GAME_NAME, ['name'])
 export class Game {
   @PrimaryGeneratedColumn('uuid')
   id: string;

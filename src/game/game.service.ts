@@ -7,17 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
-import { hasNoFields, isConstraint } from '../utils';
-import {
-  createQueryBuilder,
-  DeleteResult,
-  getConnection,
-  Repository,
-  UpdateResult,
-} from 'typeorm';
+import { hasNoFields } from '../utils';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { Game, UQ_GAME_NAME } from './entities/game.entity';
+import { Game } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
@@ -45,10 +39,6 @@ export class GameService {
         let res = await this.gameRepository.save(createGameDto);
         return await this.findOne(res.id);
       } catch (e) {
-        if (isConstraint(e, UQ_GAME_NAME)) {
-          throw new BadRequestException('The given game name is already used');
-        }
-        this.logger.error(e);
         throw new InternalServerErrorException();
       }
     }
