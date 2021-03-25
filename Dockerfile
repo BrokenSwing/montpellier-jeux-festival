@@ -18,8 +18,9 @@ WORKDIR /
 ENV REACT_APP_API_URL=/
 
 RUN git clone https://github.com/Axel-Duval/front-mojef app && \
-    cd /app &&                                                 \
-    npm install &&                                             \
+    cd /app                                                 && \
+    git checkout 9add7232a3519dc636700a129a0fa0343e74f9c0   && \
+    npm install                                             && \
     npm run build
 
 # Backend runtime
@@ -31,6 +32,6 @@ COPY --from=serverBuild /app/dist ./dist
 
 COPY --from=clientBuild /app/build ./dist/spa
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD ["node", "dist/main", "start"]
