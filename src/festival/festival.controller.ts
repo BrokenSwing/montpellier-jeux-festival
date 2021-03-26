@@ -14,9 +14,7 @@ import { UUIDPipe } from '../utils';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@ApiBearerAuth()
 @ApiTags('Festivals')
-@UseGuards(JwtAuthGuard)
 @Controller('api/festival')
 export class FestivalController {
   constructor(private readonly festivalService: FestivalService) {}
@@ -24,9 +22,19 @@ export class FestivalController {
   /**
    * Allows to list all available festivals.
    */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.festivalService.findAll();
+  }
+
+  /**
+   * Allow to retrieve data for the ongoing festival.
+   */
+  @Get('current')
+  findCurrentFestival() {
+    return this.festivalService.findCurrent();
   }
 
   /**
@@ -35,6 +43,8 @@ export class FestivalController {
    * As a consequence, visitors will be able to access this new festival
    * data (exhibited games, editors, etc ...).
    */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createFestivalDto: CreateFestivalDto) {
     return this.festivalService.create(createFestivalDto);
@@ -43,6 +53,8 @@ export class FestivalController {
   /**
    * Allows to retrieve data for a specific festival.
    */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id', UUIDPipe) id: string) {
     return this.festivalService.findOne(id);
@@ -58,6 +70,8 @@ export class FestivalController {
    * If you update a festival to be inactive and this festival was active,
    * then no festival will be active.
    */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', UUIDPipe) id: string,

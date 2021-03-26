@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -27,14 +28,14 @@ export class GameQuantitiesController {
   }
 
   @Post()
-  create(createGameQuantitiesDto: CreateGameQuantitiesDto) {
+  create(@Body() createGameQuantitiesDto: CreateGameQuantitiesDto) {
     return this.gameQuantitiesService.create(createGameQuantitiesDto);
   }
 
   @Patch(':id')
   update(
     @Param('id', UUIDPipe) id: string,
-    updateGameQuantitiesDto: UpdateGameQuantitiesDto,
+    @Body() updateGameQuantitiesDto: UpdateGameQuantitiesDto,
   ) {
     return this.gameQuantitiesService.update(id, updateGameQuantitiesDto);
   }

@@ -1,4 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Booking } from 'src/booking/entities/booking.entity';
 import {
   Column,
   Entity,
@@ -33,4 +34,8 @@ export class Festival {
 
   @OneToMany(() => Area, (area) => area.festival)
   areas: Area[];
+
+  @ApiHideProperty()
+  @OneToMany(() => Booking, (booking) => booking.festival)
+  bookings: Booking[];
 }

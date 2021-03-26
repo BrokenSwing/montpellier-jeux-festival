@@ -11,6 +11,7 @@ import { CreateFestivalDto } from './dto/create-festival.dto';
 import { UpdateFestivalDto } from './dto/update-festival.dto';
 import { Festival, UQ_NAME } from './entities/festival.entity';
 import { hasNoFields, isConstraint } from '../utils';
+import { Game } from 'src/game/entities/game.entity';
 
 /**
  * This service is responsible for managing festivals.
@@ -22,6 +23,8 @@ export class FestivalService {
   constructor(
     @InjectRepository(Festival)
     private festivalRepository: Repository<Festival>,
+    @InjectRepository(Game)
+    private gameRepository: Repository<Game>,
   ) {}
 
   /**
@@ -56,6 +59,36 @@ export class FestivalService {
       },
       relations: ['prices', 'areas'],
     });
+  }
+
+  /**
+   * @returns the data of the ongoing festival
+   */
+  async findCurrent() {
+    const currentFestival = await this.festivalRepository.findOne({
+      where: {
+        isActive: true,
+      },
+    });
+    if (currentFestival) {
+      let res = await this.gameRepository
+        .createQueryBuilder('game')
+        .leftJoin('game.publisher', 'publisher')
+        .leftJoin('game.gamesQuantities', 'gq')
+        .leftJoin('gq.area', 'area')
+        .leftJoin('area.festival', 'festival')
+        .where('festival.isActive = true')
+        .addSelect('publisher.name')
+        .addSelect('area.label')
+        .getRawMany();
+      return {
+        name: currentFestival.name,
+        date: currentFestival.date,
+        games: res,
+      };
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   /**

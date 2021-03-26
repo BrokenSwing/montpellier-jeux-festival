@@ -12,7 +12,7 @@ import {
 export class CreateGameQuantitiesDto {
   @Min(0)
   @IsInt()
-  exhibitedCount: number;
+  exhibited: number;
 
   @Min(0)
   @IsInt()

@@ -64,8 +64,8 @@ export class Booking {
   tablesQuantities: TableQuantities[];
 
   @ApiHideProperty()
-  @OneToMany(() => GameQuantities, (quantities) => quantities.bookingId)
-  gameQuantities: GameQuantities[];
+  @OneToMany(() => GameQuantities, (quantities) => quantities.booking)
+  gamesQuantities: GameQuantities[];
 
   @ApiHideProperty()
   @ManyToOne(() => Festival)

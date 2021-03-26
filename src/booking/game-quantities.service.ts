@@ -29,7 +29,7 @@ export class GameQuantitiesService {
    */
   create(createGameQuantitiesDto: CreateGameQuantitiesDto) {
     const { booking, area, game, ...dto } = createGameQuantitiesDto;
-    return this.gameQuantitiesRepository.create({
+    return this.gameQuantitiesRepository.save({
       bookingId: booking,
       gameId: game,
       areaId: area,

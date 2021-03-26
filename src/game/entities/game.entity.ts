@@ -1,6 +1,13 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Company } from '../../company/entities/company.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { GameQuantities } from 'src/booking/entities/game-quantities.entity';
 
 @Entity()
 export class Game {
@@ -44,4 +51,8 @@ export class Game {
   @ApiHideProperty()
   @ManyToOne(() => Company, (publisher) => publisher.games)
   publisher: Company;
+
+  @ApiHideProperty()
+  @OneToMany(() => GameQuantities, (gameQuantities) => gameQuantities.game)
+  gamesQuantities: GameQuantities[];
 }
