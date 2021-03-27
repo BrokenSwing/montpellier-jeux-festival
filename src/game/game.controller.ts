@@ -15,13 +15,13 @@ import { UUIDPipe } from '../utils';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('Games')
 @Controller('api/game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createGameDto: CreateGameDto) {
     return this.gameService.create(createGameDto);
@@ -42,8 +42,6 @@ export class GameController {
     return this.gameService.findOne(id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   updateGame(
     @Param('id', UUIDPipe) id: string,
@@ -52,8 +50,6 @@ export class GameController {
     return this.gameService.update(id, updateGameDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deleteGame(@Param('id', UUIDPipe) id: string) {
     return this.gameService.remove(id);
