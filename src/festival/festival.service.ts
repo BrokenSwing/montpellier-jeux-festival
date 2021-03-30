@@ -1,12 +1,13 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Connection, Repository, UpdateResult } from 'typeorm';
 import { CreateFestivalDto } from './dto/create-festival.dto';
 import { UpdateFestivalDto } from './dto/update-festival.dto';
 import { Festival, UQ_NAME } from './entities/festival.entity';
@@ -28,6 +29,7 @@ export class FestivalService {
     private gameRepository: Repository<Game>,
     @InjectRepository(TableQuantities)
     private tablesQuantitiesRepository: Repository<TableQuantities>,
+    private connection: Connection,
   ) {}
 
   /**
@@ -144,17 +146,22 @@ export class FestivalService {
       throw new BadRequestException('You must specify fields to update');
     }
 
-    let result: UpdateResult;
-    try {
-      result = await this.festivalRepository.update(id, updateFestivalDto);
-    } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException();
-    }
+    await this.connection.transaction(async (entityManager) => {
+      const festivalRepo = entityManager.getRepository(Festival);
+      if (updateFestivalDto.isActive) {
+        await festivalRepo.update(
+          {},
+          {
+            isActive: false,
+          },
+        );
+      }
+      const result = await festivalRepo.update(id, updateFestivalDto);
+      if (result.affected === 0) {
+        throw new NotFoundException();
+      }
+    });
 
-    if (result.affected === 0) {
-      throw new NotFoundException();
-    }
     return await this.findOne(id);
   }
 }
