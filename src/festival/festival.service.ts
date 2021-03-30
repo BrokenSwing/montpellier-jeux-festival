@@ -114,7 +114,7 @@ export class FestivalService {
    * Summarize the festival with the given id.
    *
    * @param id The id of the festival to retrieve
-   * @returns tables and floors quantities group by price's id
+   * @returns tables and floors quantities grouped by price's id
    */
   summarize(id: string) {
     return this.tablesQuantitiesRepository
@@ -122,11 +122,13 @@ export class FestivalService {
       .select('SUM (table_quantities.floors)', 'floors')
       .addSelect('SUM (table_quantities.tables)', 'tables')
       .addSelect('prices.id')
+      .addSelect('prices.label')
       .leftJoin('table_quantities.price', 'prices')
       .where('prices.festivalId = :id', {
         id,
       })
       .groupBy('prices.id')
+      .addGroupBy('prices.label')
       .getRawMany();
   }
 

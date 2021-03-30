@@ -27,8 +27,9 @@ export class BookingService {
    */
   async create(createBookingDto: CreateBookingDto) {
     const { festival, company, ...dto } = createBookingDto;
+    let result: Booking;
     try {
-      return await this.bookingRepository.save({
+      result = await this.bookingRepository.save({
         ...dto,
         festivalId: festival,
         companyId: company,
@@ -36,11 +37,12 @@ export class BookingService {
     } catch (e) {
       if (isForeignKeyError(e)) {
         throw new BadRequestException(
-          'Either one of or both of given values for `festival` and `company` are invalid.'
+          'Either one of or both of given values for `festival` and `company` are invalid.',
         );
       }
       throw e;
     }
+    return this.findOne(result.id);
   }
 
   /**
@@ -55,7 +57,7 @@ export class BookingService {
       where: {
         festivalId,
       },
-      relations: ['company'],
+      relations: ['tablesQuantities', 'gamesQuantities', 'company'],
     });
   }
 
@@ -67,7 +69,9 @@ export class BookingService {
    * @returns a booking
    */
   async findOne(id: string) {
-    const booking = await this.bookingRepository.findOne(id);
+    const booking = await this.bookingRepository.findOne(id, {
+      relations: ['tablesQuantities', 'gamesQuantities', 'company'],
+    });
     if (booking) {
       return booking;
     }
