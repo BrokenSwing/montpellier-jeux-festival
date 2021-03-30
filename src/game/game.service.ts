@@ -36,7 +36,7 @@ export class GameService {
     }
     if (res) {
       try {
-        let res = await this.gameRepository.save(createGameDto);
+        const res = await this.gameRepository.save(createGameDto);
         return await this.findOne(res.id);
       } catch (e) {
         throw new InternalServerErrorException();
@@ -75,7 +75,7 @@ export class GameService {
     if (hasNoFields(updateGameDto)) {
       return new BadRequestException('You must specify fields to update');
     }
-    let res = await this.gameRepository.save({
+    const res = await this.gameRepository.save({
       id: id,
       ...updateGameDto,
     });

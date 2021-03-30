@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { User } from '../user/entities/user.entity';
 
-export const AdminRequired = (isRequired: boolean = true) =>
+export const AdminRequired = (isRequired = true) =>
   SetMetadata('adminRequired', isRequired);
 
 @Injectable()

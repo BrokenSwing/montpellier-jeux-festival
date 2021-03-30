@@ -1,8 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Game } from '../../game/entities/game.entity';
-export const UQ_COMPANY_NAME = "UQ_COMPANY_NAME";
+export const UQ_COMPANY_NAME = 'UQ_COMPANY_NAME';
 
 @Entity()
 @Unique(UQ_COMPANY_NAME, ['name'])

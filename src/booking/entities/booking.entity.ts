@@ -67,7 +67,7 @@ export class Booking {
 
   @ManyToOne(() => Company)
   company: Company;
-  
+
   @ApiHideProperty()
   @ManyToOne(() => Festival)
   festival: Festival;

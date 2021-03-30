@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UUIDPipe } from '../utils';
 import { CreateGameQuantitiesDto } from './dto/create-game-quantities.dto';
 import { GameQuantitiesService } from './game-quantities.service';
 

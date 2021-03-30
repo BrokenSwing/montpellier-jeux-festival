@@ -74,7 +74,7 @@ export class FestivalService {
       },
     });
     if (currentFestival) {
-      let res = await this.gameRepository
+      const res = await this.gameRepository
         .createQueryBuilder('game')
         .leftJoin('game.publisher', 'publisher')
         .leftJoin('game.gamesQuantities', 'gq')
