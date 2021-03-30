@@ -12,7 +12,7 @@ import { CreateFestivalDto } from './dto/create-festival.dto';
 import { UpdateFestivalDto } from './dto/update-festival.dto';
 import { UUIDPipe } from '../utils';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AdminRequired, JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Festivals')
 @Controller('api/festival')
@@ -45,6 +45,7 @@ export class FestivalController {
    */
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @AdminRequired()
   @Post()
   create(@Body() createFestivalDto: CreateFestivalDto) {
     return this.festivalService.create(createFestivalDto);
@@ -72,6 +73,7 @@ export class FestivalController {
    */
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @AdminRequired()
   @Patch(':id')
   update(
     @Param('id', UUIDPipe) id: string,
