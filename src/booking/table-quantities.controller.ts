@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -27,7 +28,7 @@ export class TableQuantitiesController {
   }
 
   @Post()
-  create(createTableQuantitiesDto: CreateTableQuantitiesDto) {
+  create(@Body() createTableQuantitiesDto: CreateTableQuantitiesDto) {
     return this.tableQuantitiesService.create(createTableQuantitiesDto);
   }
 

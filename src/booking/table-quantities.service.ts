@@ -35,7 +35,7 @@ export class TableQuantitiesService {
       floorsCount,
       ...dto
     } = createTableQuantitiesDto;
-    return this.tableQuantitiesRepository.create({
+    return this.tableQuantitiesRepository.save({
       tables: tablesCount,
       floors: floorsCount,
       bookingId: booking,

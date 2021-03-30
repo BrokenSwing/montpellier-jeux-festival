@@ -12,6 +12,7 @@ import { UpdateFestivalDto } from './dto/update-festival.dto';
 import { Festival, UQ_NAME } from './entities/festival.entity';
 import { hasNoFields, isConstraint } from '../utils';
 import { Game } from 'src/game/entities/game.entity';
+import { TableQuantities } from 'src/booking/entities/table-quantities.entity';
 
 /**
  * This service is responsible for managing festivals.
@@ -25,6 +26,8 @@ export class FestivalService {
     private festivalRepository: Repository<Festival>,
     @InjectRepository(Game)
     private gameRepository: Repository<Game>,
+    @InjectRepository(TableQuantities)
+    private tablesQuantitiesRepository: Repository<TableQuantities>,
   ) {}
 
   /**
@@ -105,6 +108,26 @@ export class FestivalService {
       return festival;
     }
     throw new NotFoundException(`No festival with UUID ${id} can be found`);
+  }
+
+  /**
+   * Summarize the festival with the given id.
+   *
+   * @param id The id of the festival to retrieve
+   * @returns tables and floors quantities group by price's id
+   */
+  summarize(id: string) {
+    return this.tablesQuantitiesRepository
+      .createQueryBuilder('table_quantities')
+      .select('SUM (table_quantities.floors)', 'floors')
+      .addSelect('SUM (table_quantities.tables)', 'tables')
+      .addSelect('prices.id')
+      .leftJoin('table_quantities.price', 'prices')
+      .where('prices.festivalId = :id', {
+        id,
+      })
+      .groupBy('prices.id')
+      .getRawMany();
   }
 
   /**

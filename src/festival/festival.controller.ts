@@ -79,4 +79,11 @@ export class FestivalController {
   ) {
     return this.festivalService.update(id, updateFestivalDto);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/summarize')
+  summarize(@Param('id', UUIDPipe) id: string) {
+    return this.festivalService.summarize(id);
+  }
 }
