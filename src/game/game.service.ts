@@ -61,6 +61,15 @@ export class GameService {
       .getRawMany();
   }
 
+  findByArea(areaId: string) {
+    return this.gameRepository
+      .createQueryBuilder('games')
+      .leftJoin('games.gamesQuantities', 'gq')
+      .leftJoin('gq.area', 'area')
+      .where('area.id = :id', { id: areaId })
+      .getMany();
+  }
+
   async findOne(id: string) {
     const game = await this.gameRepository.findOne(id, {
       relations: ['publisher'],

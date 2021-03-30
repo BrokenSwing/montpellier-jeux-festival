@@ -37,6 +37,11 @@ export class GameController {
     return this.gameService.findAllGameTypes();
   }
 
+  @Get('byArea/:id')
+  findByArea(@Param('id', UUIDPipe) id: string) {
+    return this.gameService.findByArea(id);
+  }
+
   @Get(':id')
   findOneGame(@Param('id', UUIDPipe) id: string) {
     return this.gameService.findOne(id);
