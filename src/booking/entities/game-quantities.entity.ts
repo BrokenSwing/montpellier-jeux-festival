@@ -51,6 +51,8 @@ export class GameQuantities {
   area: Area;
 
   @ApiHideProperty()
-  @ManyToOne(() => Game, (game) => game.gamesQuantities)
+  @ManyToOne(() => Game, (game) => game.gamesQuantities, {
+    primary: true,
+  })
   game: Game;
 }
