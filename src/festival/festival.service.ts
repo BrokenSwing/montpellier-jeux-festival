@@ -164,4 +164,57 @@ export class FestivalService {
 
     return await this.findOne(id);
   }
+
+  async getAccounting(id: string) {
+    return await this.festivalRepository
+      .createQueryBuilder('festival')
+      .where('festival.id = :id', { id })
+      .leftJoin('festival.prices', 'prices')
+      .leftJoin('festival.bookings', 'bookings')
+      .leftJoin('bookings.tablesQuantities', 'tableQ')
+      .leftJoin('bookings.gamesQuantities', 'gameQ')
+      .leftJoin('tableQ.price', 'price')
+      .groupBy('festival.name')
+      .select('festival.name', 'name')
+      .addSelect(
+        'COALESCE(SUM(tableQ.tables * price.tablePrice + tableQ.floors * price.floorPrice + bookings.fees - bookings.discount), 0)',
+        'recipes',
+      )
+      .addSelect(
+        `
+        COALESCE(
+          SUM(
+            (tableQ.tables * price.tablePrice + tableQ.floors * price.floorPrice) * 
+              CASE 
+                WHEN bookings.billSentOn IS NULL THEN 0 
+                ELSE 1
+              END
+          ), 
+          0
+        )`,
+        'totalSentBillsEuro',
+      )
+      .addSelect(
+        `
+        COALESCE(
+          SUM(
+            (tableQ.tables * price.tablePrice + tableQ.floors * price.floorPrice) * 
+              CASE 
+                WHEN bookings.billPaidOn IS NULL THEN 0 
+                ELSE 1
+              END
+          ), 
+          0
+        )`,
+        'totalPaidBillsEuro',
+      )
+      .addSelect('SUM(bookings.discount)', 'discounts')
+      .addSelect('SUM(bookings.fees)', 'fees')
+      .addSelect('SUM(gameQ.donation)', 'donations')
+      .addSelect('SUM(gameQ.raffle)', 'raffle')
+      .addSelect('COUNT(DISTINCT bookings.id)', 'totalBills')
+      .addSelect('COALESCE(SUM(CASE WHEN bookings.billPaidOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalPaidBills')
+      .addSelect('COALESCE(SUM(CASE WHEN bookings.billSentOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalSentBills')
+      .getRawOne();
+  }
 }

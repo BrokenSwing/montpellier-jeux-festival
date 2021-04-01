@@ -88,4 +88,12 @@ export class FestivalController {
   summarize(@Param('id', UUIDPipe) id: string) {
     return this.festivalService.summarize(id);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @AdminRequired()
+  @Get(':id/accounting')
+  accounting(@Param('id', UUIDPipe) id: string) {
+    return this.festivalService.getAccounting(id);
+  }
 }
