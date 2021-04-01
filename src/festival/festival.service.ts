@@ -166,13 +166,12 @@ export class FestivalService {
   }
 
   async getAccounting(id: string) {
-    return await this.festivalRepository
+    const r1 = await this.festivalRepository
       .createQueryBuilder('festival')
       .where('festival.id = :id', { id })
       .leftJoin('festival.prices', 'prices')
       .leftJoin('festival.bookings', 'bookings')
       .leftJoin('bookings.tablesQuantities', 'tableQ')
-      .leftJoin('bookings.gamesQuantities', 'gameQ')
       .leftJoin('tableQ.price', 'price')
       .groupBy('festival.name')
       .select('festival.name', 'name')
@@ -189,7 +188,7 @@ export class FestivalService {
                 WHEN bookings.billSentOn IS NULL THEN 0 
                 ELSE 1
               END
-          ), 
+          ),
           0
         )`,
         'totalSentBillsEuro',
@@ -203,18 +202,35 @@ export class FestivalService {
                 WHEN bookings.billPaidOn IS NULL THEN 0 
                 ELSE 1
               END
-          ), 
+          ),
           0
         )`,
         'totalPaidBillsEuro',
       )
       .addSelect('SUM(bookings.discount)', 'discounts')
       .addSelect('SUM(bookings.fees)', 'fees')
-      .addSelect('SUM(gameQ.donation)', 'donations')
-      .addSelect('SUM(gameQ.raffle)', 'raffle')
       .addSelect('COUNT(DISTINCT tableQ.bookingId)', 'totalBills')
-      .addSelect('COALESCE(SUM(CASE WHEN bookings.billPaidOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalPaidBills')
-      .addSelect('COALESCE(SUM(CASE WHEN bookings.billSentOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalSentBills')
+      .addSelect(
+        'COALESCE(COUNT(DISTINCT CASE WHEN bookings.billPaidOn IS NULL OR tableQ.bookingId IS NULL THEN NULL ELSE Bookings.id END), 0)',
+        'totalPaidBills',
+      )
+      .addSelect(
+        'COALESCE(COUNT(DISTINCT CASE WHEN bookings.billSentOn IS NULL OR tableQ.bookingId IS NULL THEN NULL ELSE Bookings.id END), 0)',
+        'totalSentBills',
+      )
       .getRawOne();
+
+    const r2 = await this.festivalRepository
+      .createQueryBuilder('festival')
+      .where('festival.id = :id', { id })
+      .leftJoin('festival.bookings', 'bookings')
+      .leftJoin('bookings.gamesQuantities', 'gameQ')
+      .select('SUM(gameQ.donation)', 'donations')
+      .addSelect('SUM(gameQ.raffle)', 'raffle')
+      .getRawOne();
+
+    console.log(r1);
+    console.log(r2);
+    return { ...r1, ...r2 };
   }
 }
