@@ -212,7 +212,7 @@ export class FestivalService {
       .addSelect('SUM(bookings.fees)', 'fees')
       .addSelect('SUM(gameQ.donation)', 'donations')
       .addSelect('SUM(gameQ.raffle)', 'raffle')
-      .addSelect('COUNT(DISTINCT bookings.id)', 'totalBills')
+      .addSelect('COUNT(DISTINCT tableQ.bookingId)', 'totalBills')
       .addSelect('COALESCE(SUM(CASE WHEN bookings.billPaidOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalPaidBills')
       .addSelect('COALESCE(SUM(CASE WHEN bookings.billSentOn IS NULL THEN 0 ELSE 1 END), 0)', 'totalSentBills')
       .getRawOne();
