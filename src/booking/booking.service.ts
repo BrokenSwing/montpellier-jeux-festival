@@ -70,7 +70,12 @@ export class BookingService {
    */
   async findOne(id: string) {
     const booking = await this.bookingRepository.findOne(id, {
-      relations: ['tablesQuantities', 'gamesQuantities', 'company', 'tablesQuantities.price'],
+      relations: [
+        'tablesQuantities',
+        'gamesQuantities',
+        'company',
+        'tablesQuantities.price',
+      ],
     });
     if (booking) {
       return booking;

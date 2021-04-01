@@ -3,10 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { UserService } from './user/user.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Festival } from './festival/entities/festival.entity';
-import { Repository } from 'typeorm';
-import { TableQuantities } from './booking/entities/table-quantities.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

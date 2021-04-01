@@ -22,6 +22,11 @@ import { UpdateAreaDto } from './dto/update-area.dto';
 export class AreaController {
   constructor(private areaService: AreaService) {}
 
+  @Get(':id')
+  get(@Param('id', UUIDPipe) id: string) {
+    return this.areaService.findOne(id);
+  }
+
   @Post()
   create(@Body() createAreaDto: CreateAreaDto) {
     return this.areaService.create(createAreaDto);

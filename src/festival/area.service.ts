@@ -24,6 +24,14 @@ export class AreaService {
     private areaRepository: Repository<Area>,
   ) {}
 
+  async findOne(id: string) {
+    const area = await this.areaRepository.findOne(id);
+    if (area) {
+      return area;
+    }
+    throw new NotFoundException(`No area with UUID ${id} can be found`);
+  }
+
   /**
    * Creates an area for a festival.
    *
