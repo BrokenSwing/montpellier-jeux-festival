@@ -169,7 +169,6 @@ export class FestivalService {
     const r1 = await this.festivalRepository
       .createQueryBuilder('festival')
       .where('festival.id = :id', { id })
-      .leftJoin('festival.prices', 'prices')
       .leftJoin('festival.bookings', 'bookings')
       .leftJoin('bookings.tablesQuantities', 'tableQ')
       .leftJoin('tableQ.price', 'price')
@@ -223,16 +222,16 @@ export class FestivalService {
       .where('festival.id = :id', { id })
       .leftJoin('festival.bookings', 'bookings')
       .leftJoin('bookings.gamesQuantities', 'gameQ')
-      .select('SUM(gameQ.donation)', 'donations')
-      .addSelect('SUM(gameQ.raffle)', 'raffle')
+      .select('COALESCE(SUM(gameQ.donation), 0)', 'donations')
+      .addSelect('COALESCE(SUM(gameQ.raffle), 0)', 'raffle')
       .getRawOne();
 
     const r3 = await this.festivalRepository
       .createQueryBuilder('festival')
       .where('festival.id = :id', { id })
       .leftJoin('festival.bookings', 'bookings')
-      .select('SUM(bookings.discount)', 'discounts')
-      .addSelect('SUM(bookings.fees)', 'fees')
+      .select('COALESCE(SUM(bookings.discount), 0)', 'discounts')
+      .addSelect('COALESCE(SUM(bookings.fees), 0)', 'fees')
       .getRawOne();
 
     return { ...r1, ...r2, ...r3 };
