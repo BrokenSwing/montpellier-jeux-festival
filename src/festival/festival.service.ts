@@ -207,8 +207,6 @@ export class FestivalService {
         )`,
         'totalPaidBillsEuro',
       )
-      .addSelect('SUM(bookings.discount)', 'discounts')
-      .addSelect('SUM(bookings.fees)', 'fees')
       .addSelect('COUNT(DISTINCT tableQ.bookingId)', 'totalBills')
       .addSelect(
         'COALESCE(COUNT(DISTINCT CASE WHEN bookings.billPaidOn IS NULL OR tableQ.bookingId IS NULL THEN NULL ELSE Bookings.id END), 0)',
@@ -229,8 +227,14 @@ export class FestivalService {
       .addSelect('SUM(gameQ.raffle)', 'raffle')
       .getRawOne();
 
-    console.log(r1);
-    console.log(r2);
-    return { ...r1, ...r2 };
+    const r3 = await this.festivalRepository
+      .createQueryBuilder('festival')
+      .where('festival.id = :id', { id })
+      .leftJoin('festival.bookings', 'bookings')
+      .select('SUM(bookings.discount)', 'discounts')
+      .addSelect('SUM(bookings.fees)', 'fees')
+      .getRawOne();
+
+    return { ...r1, ...r2, ...r3 };
   }
 }
