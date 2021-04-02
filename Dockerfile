@@ -19,7 +19,7 @@ ENV REACT_APP_API_URL=/
 
 RUN git clone https://github.com/Axel-Duval/front-mojef app && \
     cd /app                                                 && \
-    git checkout 2c1087adc3b4f1533ac58a540ea9a7793d2d0750   && \
+    git checkout 12de1fe71f60e8951d910d5457a82e53d4e0f278   && \
     npm install                                             && \
     npm run build
 
